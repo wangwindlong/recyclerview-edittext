@@ -66,6 +66,17 @@
 			android:textAppearance="@style/TextAppearance.AppCompat.Small"
 			android:textColor="?primaryTextSelector"/>
 
+		<TextView
+			android:id="@+id/total_tv"
+			android:text="234234"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/total_tv2"
+			android:text="234234"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+
 	</LinearLayout>
 
 </RelativeLayout>

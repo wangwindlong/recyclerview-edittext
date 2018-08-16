@@ -31,7 +31,9 @@ import eu.davidea.samples.flexibleadapter.items.ExpandableLevel1Item;
 import eu.davidea.samples.flexibleadapter.items.HeaderItem;
 import eu.davidea.samples.flexibleadapter.items.InstagramHeaderItem;
 import eu.davidea.samples.flexibleadapter.items.InstagramItem;
+import eu.davidea.samples.flexibleadapter.items.MultiEdittextItem;
 import eu.davidea.samples.flexibleadapter.items.OverallItem;
+import eu.davidea.samples.flexibleadapter.items.ScrollableFooterItem;
 import eu.davidea.samples.flexibleadapter.items.SimpleItem;
 import eu.davidea.samples.flexibleadapter.items.StaggeredHeaderItem;
 import eu.davidea.samples.flexibleadapter.items.StaggeredItem;
@@ -66,9 +68,9 @@ public class DatabaseService {
         return mInstance;
     }
 
-	/*-------------------*/
+    /*-------------------*/
     /* DATABASE CREATION */
-	/*-------------------*/
+    /*-------------------*/
 
     public void clear() {
         mItems.clear();
@@ -86,7 +88,9 @@ public class DatabaseService {
     public void createOverallDatabase(Resources resources) {
         databaseType = DatabaseType.OVERALL;
         mItems.clear();
-
+        mItems.add(new OverallItem(R.id.nav_master, resources.getString(R.string.master))
+                .withDescription(resources.getString(R.string.master_description))
+                .withIcon(resources.getDrawable(R.drawable.ic_view_carousel_grey600_24dp)));
         mItems.add(new OverallItem(R.id.nav_selection_modes, resources.getString(R.string.selection_modes))
                 .withDescription(resources.getString(R.string.selection_modes_description))
                 .withIcon(resources.getDrawable(R.drawable.ic_select_all_grey600_24dp)));
@@ -135,9 +139,7 @@ public class DatabaseService {
         mItems.add(new OverallItem(R.id.nav_viewpager, resources.getString(R.string.viewpager))
                 .withDescription(resources.getString(R.string.viewpager_description))
                 .withIcon(resources.getDrawable(R.drawable.ic_view_carousel_grey600_24dp)));
-        mItems.add(new OverallItem(R.id.nav_master, resources.getString(R.string.master))
-                .withDescription(resources.getString(R.string.master_description))
-                .withIcon(resources.getDrawable(R.drawable.ic_view_carousel_grey600_24dp)));
+
     }
 
     /*
@@ -192,6 +194,18 @@ public class DatabaseService {
         for (int i = 0; i < startSize; i++) {
             mItems.add(newSimpleItem(i + 1, null));
         }
+    }
+
+    public void createEdittextDatabase(int startSize) {
+        databaseType = DatabaseType.ENDLESS_SCROLLING;
+        mItems.clear();
+        for (int i = 0; i < startSize; i++) {
+            mItems.add(newEdittextItem(i + 1, null));
+        }
+        ScrollableFooterItem item = new ScrollableFooterItem("" + mItems.size());
+        item.setTitle("Scrollable Footer Item");
+        item.setSubtitle("测试副标题");
+        mItems.add(item);
     }
 
     /*
@@ -313,9 +327,9 @@ public class DatabaseService {
             mergeItem((StaggeredItem) mItems.get(7), (StaggeredItem) mItems.remove(9));
     }
 
-	/*---------------*/
-	/* ITEM CREATION */
-	/*---------------*/
+    /*---------------*/
+    /* ITEM CREATION */
+    /*---------------*/
 
     /*
      * Creates a Header item.
@@ -332,6 +346,12 @@ public class DatabaseService {
      */
     public static SimpleItem newSimpleItem(int i, IHeader header) {
         SimpleItem item = new SimpleItem("I" + i, (HeaderItem) header);
+        item.setTitle("Simple Item " + i);
+        return item;
+    }
+
+    public static MultiEdittextItem newEdittextItem(int i, IHeader header) {
+        MultiEdittextItem item = new MultiEdittextItem("I" + i, (HeaderItem) header);
         item.setTitle("Simple Item " + i);
         return item;
     }
@@ -409,8 +429,8 @@ public class DatabaseService {
     }
 
     /*
-      * Creates a similar instagram item with a Header linked.
-      */
+     * Creates a similar instagram item with a Header linked.
+     */
     public static InstagramItem newInstagramItem(int i) {
         InstagramHeaderItem header = new InstagramHeaderItem("H" + i);
         String place = InstagramRandomData.getRandomPlace();
@@ -421,8 +441,8 @@ public class DatabaseService {
     }
 
     /*
-      * Creates a staggered item with a Header linked.
-      */
+     * Creates a staggered item with a Header linked.
+     */
     public static StaggeredItem newStaggeredItem(int i, StaggeredHeaderItem header) {
         return new StaggeredItem(i, header);
     }
@@ -440,9 +460,9 @@ public class DatabaseService {
         return new ItemHolder(model, header);
     }
 
-	/*-----------------------*/
-	/* MAIN DATABASE METHODS */
-	/*-----------------------*/
+    /*-----------------------*/
+    /* MAIN DATABASE METHODS */
+    /*-----------------------*/
 
     /**
      * @return The original list.
@@ -520,9 +540,9 @@ public class DatabaseService {
         mInstance = null;
     }
 
-	/*---------------------*/
-	/* MERGE-SPLIT METHODS */
-	/*---------------------*/
+    /*---------------------*/
+    /* MERGE-SPLIT METHODS */
+    /*---------------------*/
 
     public int getMaxStaggeredId() {
         int count = 1;

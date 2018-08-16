@@ -10,6 +10,7 @@ import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import eu.davidea.samples.flexibleadapter.fragments.ItemEditChangeListener;
 import eu.davidea.samples.flexibleadapter.items.ScrollableExpandableItem;
 import eu.davidea.samples.flexibleadapter.items.ScrollableFooterItem;
 import eu.davidea.samples.flexibleadapter.items.ScrollableLayoutItem;
@@ -30,6 +31,9 @@ public class ExampleAdapter extends FlexibleAdapter<AbstractFlexibleItem> {
 
     private static final String TAG = ExampleAdapter.class.getSimpleName();
 
+    private ItemEditChangeListener mEditChangeListener;
+
+
     public ExampleAdapter(List<AbstractFlexibleItem> items, Object listeners) {
         // stableIds ? true = Items implement hashCode() so they can have stableIds!
         super(items, listeners, true);
@@ -37,6 +41,22 @@ public class ExampleAdapter extends FlexibleAdapter<AbstractFlexibleItem> {
         // In case you need a Handler, do this:
         // - Overrides the internal Handler with a custom callback that extends the internal one
         mHandler = new Handler(Looper.getMainLooper(), new MyHandlerCallback());
+        if (listeners instanceof ItemEditChangeListener) {
+            mEditChangeListener = (ItemEditChangeListener) listeners;
+        }
+    }
+
+    public void setEditChangeListener(ItemEditChangeListener listener) {
+        this.mEditChangeListener = listener;
+    }
+
+    public ItemEditChangeListener getEditChangeListener() {
+        return mEditChangeListener;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 
     @Override

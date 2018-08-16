@@ -1,6 +1,7 @@
 package eu.davidea.samples.flexibleadapter.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,17 +9,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import eu.davidea.fastscroller.FastScroller;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.SelectableAdapter.Mode;
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration;
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem;
+import eu.davidea.flexibleadapter.utils.Log;
 import eu.davidea.flipview.FlipView;
 import eu.davidea.samples.flexibleadapter.ExampleAdapter;
 import eu.davidea.samples.flexibleadapter.MainActivity;
 import eu.davidea.samples.flexibleadapter.R;
+import eu.davidea.samples.flexibleadapter.items.MultiEdittextItem;
+import eu.davidea.samples.flexibleadapter.items.ScrollableFooterItem;
 import eu.davidea.samples.flexibleadapter.items.ScrollableUseCaseItem;
 import eu.davidea.samples.flexibleadapter.services.DatabaseService;
 
@@ -27,9 +33,9 @@ import eu.davidea.samples.flexibleadapter.services.DatabaseService;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class FragmentSelectionModes extends AbstractFragment {
+public class FragmentEdittext extends AbstractFragment implements ItemEditChangeListener {
 
-    public static final String TAG = FragmentSelectionModes.class.getSimpleName();
+    public static final String TAG = FragmentEdittext.class.getSimpleName();
 
     /**
      * Custom implementation of FlexibleAdapter
@@ -38,8 +44,8 @@ public class FragmentSelectionModes extends AbstractFragment {
 
 
     @SuppressWarnings("unused")
-    public static FragmentSelectionModes newInstance(int columnCount) {
-        FragmentSelectionModes fragment = new FragmentSelectionModes();
+    public static FragmentEdittext newInstance(int columnCount) {
+        FragmentEdittext fragment = new FragmentEdittext();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -50,7 +56,7 @@ public class FragmentSelectionModes extends AbstractFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public FragmentSelectionModes() {
+    public FragmentEdittext() {
     }
 
     @Override
@@ -61,13 +67,18 @@ public class FragmentSelectionModes extends AbstractFragment {
 
         // Create New Database and Initialize RecyclerView
         if (savedInstanceState == null) {
-            DatabaseService.getInstance().createEndlessDatabase(200);
+            DatabaseService.getInstance().createEdittextDatabase(20);
         }
         initializeRecyclerView(savedInstanceState);
 
         // Settings for FlipView
         FlipView.stopLayoutAnimation();
     }
+
+//    private List<AbstractFlexibleItem> initTestData() {
+//        List<AbstractFlexibleItem> items = new ArrayList<>();
+//        return items;
+//    }
 
     @SuppressWarnings({"ConstantConditions", "NullableProblems"})
     private void initializeRecyclerView(Bundle savedInstanceState) {
@@ -96,7 +107,7 @@ public class FragmentSelectionModes extends AbstractFragment {
             @Override
             public void run() {
                 if (!isDetached() && getView() != null)
-                Snackbar.make(getView(), "Selection SINGLE is enabled", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Selection SINGLE is enabled", Snackbar.LENGTH_SHORT).show();
             }
         }, 1500L);
 
@@ -120,6 +131,41 @@ public class FragmentSelectionModes extends AbstractFragment {
                 getString(R.string.selection_modes_use_case_title),
                 getString(R.string.selection_modes_use_case_description)), 1200L, true
         );
+
+//        mAdapter.removeItemsOfType(100);
+//        final ScrollableFooterItem item = new ScrollableFooterItem("SFI");
+//        item.setTitle(mRecyclerView.getContext().getString(R.string.scrollable_footer_title));
+//        item.setSubtitle(mRecyclerView.getContext().getString(R.string.scrollable_footer_subtitle));
+//        mAdapter.addScrollableFooterWithDelay(item, 1000L, false);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.setEditChangeListener(FragmentEdittext.this::onItemEditChanged);
+                caculateTotal();
+            }
+        },1000);
+
+    }
+
+    private void caculateTotal() {
+        caculateTotal(0);
+        caculateTotal(1);
+    }
+
+    private void caculateTotal(int type) {
+        float result = 0f;
+        int count = mAdapter.getItemCount();
+        for (int i = 0; i < count; i++) {
+            AbstractFlexibleItem item = mAdapter.getItem(i);
+            if (item != null && item instanceof MultiEdittextItem) {
+                result += ((MultiEdittextItem) item).getTotalPrice(type);
+            }
+        }
+        Log.d("caculateTotal result=" + result);
+        ScrollableFooterItem scrollableFooterItem = (ScrollableFooterItem) mAdapter.getItem(count - 1);
+        scrollableFooterItem.updateTotal(String.format(Locale.getDefault(), "%.2f", result), type);
+        mAdapter.updateItem(scrollableFooterItem);
     }
 
     @Override
@@ -135,4 +181,8 @@ public class FragmentSelectionModes extends AbstractFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemEditChanged(int index, int type) {
+        caculateTotal(type);
+    }
 }

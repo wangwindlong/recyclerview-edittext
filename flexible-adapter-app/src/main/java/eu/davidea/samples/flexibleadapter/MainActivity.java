@@ -58,6 +58,7 @@ import eu.davidea.samples.flexibleadapter.fragments.AbstractFragment;
 import eu.davidea.samples.flexibleadapter.fragments.FragmentAnimators;
 import eu.davidea.samples.flexibleadapter.fragments.FragmentAsyncFilter;
 import eu.davidea.samples.flexibleadapter.fragments.FragmentDataBinding;
+import eu.davidea.samples.flexibleadapter.fragments.FragmentEdittext;
 import eu.davidea.samples.flexibleadapter.fragments.FragmentEndlessScrolling;
 import eu.davidea.samples.flexibleadapter.fragments.FragmentExpandableMultiLevel;
 import eu.davidea.samples.flexibleadapter.fragments.FragmentExpandableSections;
@@ -355,6 +356,8 @@ public class MainActivity extends AppCompatActivity implements
             mFragment = FragmentStaggeredLayout.newInstance(2);
         } else if (id == R.id.nav_model_holders) {
             mFragment = FragmentHolderSections.newInstance();
+        } else if (id == R.id.nav_master) {
+            mFragment = FragmentEdittext.newInstance(2);
         } else if (id == R.id.nav_viewpager) {
             Intent intent = new Intent(this, ViewPagerActivity.class);
             ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeBasic();

@@ -25,6 +25,9 @@ import eu.davidea.viewholders.FlexibleViewHolder;
  */
 public class ScrollableFooterItem extends AbstractItem<ScrollableFooterItem.FooterViewHolder> {
 
+    private String total = "";
+    private String total2 = "";
+
     public ScrollableFooterItem(String id) {
         super(id);
     }
@@ -44,6 +47,20 @@ public class ScrollableFooterItem extends AbstractItem<ScrollableFooterItem.Foot
         return new FooterViewHolder(view, adapter);
     }
 
+    public void updateTotal(String total, int type) {
+        if (type == 0) {
+            this.total = total;
+        } else if (type == 1) {
+            this.total2 = total;
+        }
+
+    }
+
+    @Override
+    public int getItemViewType() {
+        return 100;//测试总金额item类型用
+    }
+
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, FooterViewHolder holder, int position, List payloads) {
         Context context = holder.itemView.getContext();
@@ -53,12 +70,16 @@ public class ScrollableFooterItem extends AbstractItem<ScrollableFooterItem.Foot
         );
         holder.mTitle.setText(Utils.fromHtmlCompat(getTitle()));
         holder.mSubtitle.setText(Utils.fromHtmlCompat(getSubtitle()));
+        holder.mTotalTv.setText(total);
+        holder.mTotalTv2.setText(total2);
     }
 
     class FooterViewHolder extends FlexibleViewHolder implements AnimatedViewHolder {
 
         TextView mTitle;
         TextView mSubtitle;
+        TextView mTotalTv;
+        TextView mTotalTv2;
         ImageView mDismissIcon;
 
         FooterViewHolder(View view, FlexibleAdapter adapter) {
@@ -66,6 +87,8 @@ public class ScrollableFooterItem extends AbstractItem<ScrollableFooterItem.Foot
             mTitle = view.findViewById(R.id.title);
             mSubtitle = view.findViewById(R.id.subtitle);
             mDismissIcon = view.findViewById(R.id.dismiss_icon);
+            mTotalTv = view.findViewById(R.id.total_tv);
+            mTotalTv2 = view.findViewById(R.id.total_tv2);
             mDismissIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
