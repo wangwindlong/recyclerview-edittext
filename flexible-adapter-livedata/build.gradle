@@ -62,7 +62,7 @@ dependencies {
     })
     testImplementation junit5.unitTests()
     testCompileOnly junit5.unitTestsRuntime()
-    testImplementation "de.mannodermaus.gradle.plugins:android-junit5-embedded-runtime:1.0.31"
+    testImplementation "de.mannodermaus.gradle.plugins:android-junit5-embedded-runtime:1.0.32-SNAPSHOT"
     testImplementation supportLib.recyclerView
     testImplementation project(":flexible-adapter")
 }

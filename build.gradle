@@ -15,8 +15,8 @@ allprojects {
 
         // SDK and Build tools version
         minSdk = 14
-        targetSdk = 27
-        buildTools = "27.0.3"
+        targetSdk = 28
+        buildTools = "28.0.2"
 
         // Android Architecture Components
         archLifecycleVer = "1.1.1"
@@ -35,7 +35,7 @@ allprojects {
         ]
 
         // Support Libraries dependencies
-        supportVer = "27.1.1"
+        supportVer = "28.0.0"
         constraintVer = "1.1.0"
         supportLib = [
                 design          : "com.android.support:design:${supportVer}",
@@ -111,10 +111,10 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.2.0'
         classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"
         classpath "com.github.dcendents:android-maven-gradle-plugin:2.1"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.1"
         classpath "com.vanniktech:gradle-android-javadoc-plugin:0.3.0-SNAPSHOT"
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.0.31"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.0.32-SNAPSHOT"
         classpath "eu.davidea:grabver:0.7.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
