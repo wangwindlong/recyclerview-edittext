@@ -56,8 +56,8 @@ dependencies {
 
     // Test libraries: from AS3 we'll use JUnit 5 Jupiter, using "android-junit5" plugin
     androidTestImplementation supportLib.annotations
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation("android.arch.core:core-testing:$archExtensionsVer", {
     })
     testImplementation junit5.unitTests()

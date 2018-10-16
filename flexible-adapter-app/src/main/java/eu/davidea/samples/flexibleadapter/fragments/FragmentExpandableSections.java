@@ -71,11 +71,12 @@ public class FragmentExpandableSections extends AbstractFragment {
         mAdapter = new ExampleAdapter(DatabaseService.getInstance().getDatabaseList(), getActivity());
         // OnItemAdd and OnItemRemove listeners
         mAdapter.addListener(this);
-        mAdapter.expandItemsAtStartUp()
-                .setAutoCollapseOnExpand(false)
+        mAdapter
+//                .expandItemsAtStartUp()
+                .setAutoCollapseOnExpand(true)
                 .setAutoScrollOnExpand(true)
                 .setAnimateToLimit(Integer.MAX_VALUE) //Size limit = MAX_VALUE will always animate the changes
-                .setNotifyMoveOfFilteredItems(true) //When true, filtering on big list is very slow!
+                .setNotifyMoveOfFilteredItems(false) //When true, filtering on big list is very slow!
                 .setAnimationOnForwardScrolling(DatabaseConfiguration.animateOnForwardScrolling)
                 .setAnimationOnReverseScrolling(true);
         mRecyclerView = getView().findViewById(R.id.recycler_view);

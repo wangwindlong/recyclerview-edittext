@@ -121,7 +121,7 @@ public class FragmentHeadersSections extends AbstractFragment
         // More settings
         mAdapter.setLongPressDragEnabled(true)
                 .setHandleDragEnabled(true)
-                .setSwipeEnabled(true)
+//                .setSwipeEnabled(true)
                 .setStickyHeaderElevation(5)
                 .setUnlinkAllItemsOnRemoveHeaders(true)
                 // Show Headers at startUp, 1st call, correctly executed, no warning log message!

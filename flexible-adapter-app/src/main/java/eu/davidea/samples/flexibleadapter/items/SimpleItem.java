@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tubb.smrv.SwipeHorizontalMenuLayout;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -86,7 +88,7 @@ public class SimpleItem extends AbstractItem<SimpleItem.SimpleViewHolder>
                     Color.WHITE, Color.parseColor("#dddddd"), //Same color of divider
                     DrawableUtils.getColorControlHighlight(context));
             DrawableUtils.setBackgroundCompat(holder.itemView, drawable);
-            DrawableUtils.setBackgroundCompat(holder.frontView, drawable);
+//            DrawableUtils.setBackgroundCompat(holder.frontView, drawable);
         }
 
         // Display the current flip status
@@ -101,6 +103,19 @@ public class SimpleItem extends AbstractItem<SimpleItem.SimpleViewHolder>
             holder.mTitle.setText(getTitle());
             holder.mSubtitle.setText(getSubtitle());
         }
+        holder.sml.setSwipeEnable(true);
+
+        holder.deleteView.setOnClickListener(v -> {
+            // must close normal
+            holder.sml.smoothCloseMenu(0);
+            adapter.removeItem(holder.getAdapterPosition());
+            adapter.notifyItemRemoved(holder.getAdapterPosition());
+        });
+        holder.confirmView.setOnClickListener(v -> {
+            // must close normal
+            holder.sml.smoothCloseMenu(0);
+            Toast.makeText(v.getContext(), "确认键被点击", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
@@ -123,6 +138,9 @@ public class SimpleItem extends AbstractItem<SimpleItem.SimpleViewHolder>
         View frontView;
         View rearLeftView;
         View rearRightView;
+        View deleteView;
+        View confirmView;
+        SwipeHorizontalMenuLayout sml;
 
         boolean swiped = false;
 
@@ -142,12 +160,15 @@ public class SimpleItem extends AbstractItem<SimpleItem.SimpleViewHolder>
                     }
                 }
             });
+            sml = view.findViewById(R.id.sml);
             this.mHandleView = view.findViewById(R.id.row_handle);
             setDragHandleView(mHandleView);
 
             this.frontView = view.findViewById(R.id.front_view);
-            this.rearLeftView = view.findViewById(R.id.rear_left_view);
-            this.rearRightView = view.findViewById(R.id.rear_right_view);
+            this.rearLeftView = view.findViewById(R.id.smMenuViewLeft);
+            this.rearRightView = view.findViewById(R.id.smMenuViewRight);
+            this.deleteView = view.findViewById(R.id.left_image);
+            this.confirmView = view.findViewById(R.id.right_image);
         }
 
         @Override
@@ -184,53 +205,53 @@ public class SimpleItem extends AbstractItem<SimpleItem.SimpleViewHolder>
             return eu.davidea.utils.Utils.dpToPx(itemView.getContext(), 4f);
         }
 
-        @Override
-        protected boolean shouldActivateViewWhileSwiping() {
-            return false;//default=false
-        }
+//        @Override
+//        protected boolean shouldActivateViewWhileSwiping() {
+//            return false;//default=false
+//        }
+//
+//        @Override
+//        protected boolean shouldAddSelectionInActionMode() {
+//            return false;//default=false
+//        }
 
-        @Override
-        protected boolean shouldAddSelectionInActionMode() {
-            return false;//default=false
-        }
+//        @Override
+//        public View getFrontView() {
+//            return frontView;
+//        }
+//
+//        @Override
+//        public View getRearLeftView() {
+//            return rearLeftView;
+//        }
+//
+//        @Override
+//        public View getRearRightView() {
+//            return rearRightView;
+//        }
 
-        @Override
-        public View getFrontView() {
-            return frontView;
-        }
-
-        @Override
-        public View getRearLeftView() {
-            return rearLeftView;
-        }
-
-        @Override
-        public View getRearRightView() {
-            return rearRightView;
-        }
-
-        @Override
-        public void scrollAnimators(@NonNull List<Animator> animators, int position, boolean isForward) {
-            if (mAdapter.getRecyclerView().getLayoutManager() instanceof GridLayoutManager ||
-                    mAdapter.getRecyclerView().getLayoutManager() instanceof StaggeredGridLayoutManager) {
-                if (position % 2 != 0)
-                    AnimatorHelper.slideInFromRightAnimator(animators, itemView, mAdapter.getRecyclerView(), 0.5f);
-                else
-                    AnimatorHelper.slideInFromLeftAnimator(animators, itemView, mAdapter.getRecyclerView(), 0.5f);
-            } else {
-                //Linear layout
-                if (mAdapter.isSelected(position))
-                    AnimatorHelper.slideInFromRightAnimator(animators, itemView, mAdapter.getRecyclerView(), 0.5f);
-                else
-                    AnimatorHelper.slideInFromLeftAnimator(animators, itemView, mAdapter.getRecyclerView(), 0.5f);
-            }
-        }
-
-        @Override
-        public void onItemReleased(int position) {
-            swiped = (mActionState == ItemTouchHelper.ACTION_STATE_SWIPE);
-            super.onItemReleased(position);
-        }
+//        @Override
+//        public void scrollAnimators(@NonNull List<Animator> animators, int position, boolean isForward) {
+//            if (mAdapter.getRecyclerView().getLayoutManager() instanceof GridLayoutManager ||
+//                    mAdapter.getRecyclerView().getLayoutManager() instanceof StaggeredGridLayoutManager) {
+//                if (position % 2 != 0)
+//                    AnimatorHelper.slideInFromRightAnimator(animators, itemView, mAdapter.getRecyclerView(), 0.5f);
+//                else
+//                    AnimatorHelper.slideInFromLeftAnimator(animators, itemView, mAdapter.getRecyclerView(), 0.5f);
+//            } else {
+//                //Linear layout
+//                if (mAdapter.isSelected(position))
+//                    AnimatorHelper.slideInFromRightAnimator(animators, itemView, mAdapter.getRecyclerView(), 0.5f);
+//                else
+//                    AnimatorHelper.slideInFromLeftAnimator(animators, itemView, mAdapter.getRecyclerView(), 0.5f);
+//            }
+//        }
+//
+//        @Override
+//        public void onItemReleased(int position) {
+//            swiped = (mActionState == ItemTouchHelper.ACTION_STATE_SWIPE);
+//            super.onItemReleased(position);
+//        }
     }
 
     @Override
